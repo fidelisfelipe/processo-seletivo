@@ -1,25 +1,10 @@
-package br.com.algoritimos.ordenacao;
-
-import java.util.Arrays;
-import java.util.List;
+package br.com.algoritimos.sort;
 
 public class MergeSort {
-	public static void mergeSort(List<Integer> numerosList) {
-		
-	    //Cria um vetor de inteiros e atribui os valores.
-	    int[] numeros = new int[numerosList.size()-1];
-	    
-	    for (int i = 0; i< numeros.length ; i++) {
-			numeros[i] = numerosList.get(i);
-		}
-	    
+	   public static void sort(int[] a) {
 	    //Chama o método que vai executar o algoritmo do Merge Sort.
-	    mergeSort(numeros, numeros.length);
-	    
-	    System.out.println("ordenado por merge sort:"+Arrays.toString(numeros));
-	    
+	    mergeSort(a, a.length);
 	  }
-	
 	  
 	  /**
 	   * Método que ordena um vetor de elementos inteiros, utilizando o algoritmo

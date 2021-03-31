@@ -10,9 +10,6 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import br.com.algoritimos.ordenacao.MergeSort;
-import br.com.algoritimos.ordenacao.Ordenacao;
-
 public class PalindromoTest {
 
 	@Test
@@ -31,30 +28,6 @@ public class PalindromoTest {
 			ordenado.add(object);
 			desordenado.add(object);
 		}
-		
-		System.out.println("desordenado:"+desordenado);
-		
-		System.out.println("ordenado:"+ordenado);
-		
-		Ordenacao o = new Ordenacao();
-		
-		List<Integer> ordenadoPorBolha = new ArrayList<Integer>(desordenado);
-		
-		List<Integer> ordenadoPorSort = new ArrayList<Integer>(desordenado);
-		
-		List<Integer> ordenadoPorMergeSort = new ArrayList<Integer>(desordenado);
-		
-		o.sort(ordenadoPorSort);
-		
-		System.out.println("ordenado por sort:"+ordenadoPorSort);
-		
-		o.bolha(ordenadoPorBolha);
-		
-		System.out.println("ordenado por bolha:"+ordenadoPorBolha);
-		
-		long init = System.currentTimeMillis();
-		MergeSort.mergeSort(ordenadoPorMergeSort);
-		System.out.println("executado merge sort em: "+(System.currentTimeMillis() - init)+" ms");
 		
 	}
 	
