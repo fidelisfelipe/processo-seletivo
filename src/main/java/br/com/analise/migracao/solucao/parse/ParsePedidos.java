@@ -12,9 +12,7 @@ import br.com.analise.migracao.solucao.exceptions.NextItemNegocioException;
 import br.com.analise.migracao.solucao.input.ConsultarPedidoIn;
 import br.com.analise.migracao.solucao.input.PedidosImportacaoIn;
 import br.com.analise.migracao.solucao.input.UtentesImportacaoIn;
-import br.com.analise.migracao.solucao.output.EntidadeImportacaoOut;
 import br.com.analise.migracao.solucao.output.UtentesImportacaoOut;
-import br.com.analise.migracao.solucao.proxy.JobProxy;
 import br.com.analise.migracao.solucao.request.ConfiguracaoIntegracao;
 import br.com.analise.migracao.solucao.request.RequestContext;
 

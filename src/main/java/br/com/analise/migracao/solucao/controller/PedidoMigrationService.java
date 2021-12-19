@@ -1,23 +1,14 @@
 package br.com.analise.migracao.solucao.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
-import br.com.analise.migracao.solucao.bus.BusEstado;
 import br.com.analise.migracao.solucao.bus.BusPedido;
 import br.com.analise.migracao.solucao.dto.PedidoDto;
-import br.com.analise.migracao.solucao.dto.UtenteDto;
 import br.com.analise.migracao.solucao.enums.TipoLastDate;
 import br.com.analise.migracao.solucao.exceptions.NextItemNegocioException;
 import br.com.analise.migracao.solucao.input.ConfigureIntegracaoIn;
-import br.com.analise.migracao.solucao.input.ConsultarPedidoIn;
 import br.com.analise.migracao.solucao.input.PedidosImportacaoIn;
-import br.com.analise.migracao.solucao.input.UtentesImportacaoIn;
-import br.com.analise.migracao.solucao.output.ConsultarPedidoOut;
-import br.com.analise.migracao.solucao.output.EntidadeImportacaoOut;
 import br.com.analise.migracao.solucao.output.PedidosImportacaoOut;
 import br.com.analise.migracao.solucao.output.UtentesImportacaoOut;
 import br.com.analise.migracao.solucao.parse.ParsePedidos;
