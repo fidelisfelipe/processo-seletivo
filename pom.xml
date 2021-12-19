@@ -2,37 +2,93 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>processo-seletivo</groupId>
-	<artifactId>algoritimos</artifactId>
+	<groupId>br.com.algoritimos</groupId>
+	<artifactId>processo-seletivo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<compile.source>1.8</compile.source>
+		<pmd.version>6.21.0</pmd.version>
+		<maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+		<javaee.api.version>8.0</javaee.api.version>
+		<guava.version>30.1.1-jre</guava.version>
+		<commons.version>3.12.0</commons.version>
+		<httpclient.version>4.5.13</httpclient.version>
+		<junit.jupiter.api.version>5.7.1</junit.jupiter.api.version>
+		<junit.version>4.13.2</junit.version>
+	</properties>
+	
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>${pmd.version}</version>
+				<configuration>
+					<targetJdk>${compile.source}</targetJdk>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.plugin.version}</version>
+				<configuration>
+					<source>${compile.source}</source>
+					<target>${compile.source}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
 	<dependencies>
+		<!-- PMD -->
+		<dependency>
+			<groupId>net.sourceforge.pmd</groupId>
+			<artifactId>pmd-java</artifactId>
+			<version>${pmd.version}</version>
+		</dependency>
 		<!-- CDI -->
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
-			<version>8.0</version>
+			<version>${javaee.api.version}</version>
 		</dependency>
 		<!-- Collections -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>30.1.1-jre</version>
+			<version>${guava.version}</version>
+		</dependency>
+		<!--  Commons -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>${commons.version}</version>
+		</dependency>
+		<!-- HTTP -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${httpclient.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.7.1</version>
+			<version>${junit.jupiter.api.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.13.2</version>
-			<scope>test</scope>
+			<version>${junit.version}</version>
+			<scope>compiler</scope><!-- deve migrar para test, mas por enquanto ficará assim :) -->
 		</dependency>
-
 	</dependencies>
 
 </project>
