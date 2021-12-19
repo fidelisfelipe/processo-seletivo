@@ -40,6 +40,7 @@ import br.com.analise.migracao.solucao.request.RequestContext;
 		Verboso<br>
 		Acoplado<br>
 		Poderia estar mais simples<br>
+		PortuguêsInglês fica estranho
 	
 	- Identificacao os possiveis erros que o metodo apresenta e como podem ser corrigidos<br>
 	
@@ -153,19 +154,6 @@ public class PedidoMigrationService {
 					pedidoBanco.setEntidadeRequerente(outputEntidade.getEntidade());//entidadeRequerente ???
 				}
 			
-			}catch (NextItemNegocioException e) {
-
-				System.err.println("Item não processado."+pedidoDto.toString());
-				
-				//add pendencia
-				pendenciaList.add(pedidoBanco);
-				
-				//set update 
-				updateDate = Boolean.FALSE;
-				
-				//proximo item
-				break;
-			}
 
 			// O que e feito com o resultado da migracao outPedido ?
 			// a referencia do objeto de retorno do insert/update e rescrita
@@ -182,12 +170,21 @@ public class PedidoMigrationService {
 			inPedido.setPedido(pedidoBanco);
 
 			//criaPedido e atualizaPedido poderiam ser um metodo so tambem
-			if (inserting) {
-				//cria pedido no Oracle
-				outPedido = pedidoProxy.criaPedido(inPedido);
-			} else {
-				//atualiza pedido no Oracle
-				outPedido = pedidoProxy.atualizaPedido(inPedido);
+			//cria pedido no Oracle
+			pedidoProxy.salvarOuAtualizar(inPedido, inserting);
+			
+			}catch (NextItemNegocioException e) {
+				
+				System.err.println("Item não processado."+pedidoDto.toString());
+				
+				//add pendencia
+				pendenciaList.add(pedidoBanco);
+				
+				//set update 
+				updateDate = Boolean.FALSE;
+				
+				//proximo item
+				break;
 			}
 		}
 		
