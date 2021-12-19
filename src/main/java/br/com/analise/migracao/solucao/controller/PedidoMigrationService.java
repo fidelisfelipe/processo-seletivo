@@ -155,23 +155,23 @@ public class PedidoMigrationService {
 				}
 			
 
-			// O que e feito com o resultado da migracao outPedido ?
-			// a referencia do objeto de retorno do insert/update e rescrita
-			// o objeto nao e utilizado apos re-criacao
-
-			//poderia ser criada uma lista de pendencia para os pedidos nao migrados para solucionar posteriormente apos algum evento quando nao houver retorno
-			//poderia lancar uma NegocioException itens nao inseridos/atualizados para pendencias
-			
-			//poderia descartar esse objeto outPedido
-			
-			ConsultarPedidoOut outPedido = new ConsultarPedidoOut();//Warning: objeto nao utilizado
-			ConsultarPedidoIn inPedido = new ConsultarPedidoIn();
-			inPedido.setRequestContext(rc);
-			inPedido.setPedido(pedidoBanco);
-
-			//criaPedido e atualizaPedido poderiam ser um metodo so tambem
-			//cria pedido no Oracle
-			pedidoProxy.salvarOuAtualizar(inPedido, inserting);
+				// O que e feito com o resultado da migracao outPedido ?
+				// a referencia do objeto de retorno do insert/update e rescrita
+				// o objeto nao e utilizado apos re-criacao
+	
+				//poderia ser criada uma lista de pendencia para os pedidos nao migrados para solucionar posteriormente apos algum evento quando nao houver retorno
+				//poderia lancar uma NegocioException itens nao inseridos/atualizados para pendencias
+				
+				//poderia descartar esse objeto outPedido
+				
+				ConsultarPedidoOut outPedido = new ConsultarPedidoOut();//Warning: objeto nao utilizado
+				ConsultarPedidoIn inPedido = new ConsultarPedidoIn();
+				inPedido.setRequestContext(rc);
+				inPedido.setPedido(pedidoBanco);
+	
+				//criaPedido e atualizaPedido poderiam ser um metodo so tambem
+				//cria pedido no Oracle
+				pedidoProxy.salvarOuAtualizar(inPedido, inserting);
 			
 			}catch (NextItemNegocioException e) {
 				
