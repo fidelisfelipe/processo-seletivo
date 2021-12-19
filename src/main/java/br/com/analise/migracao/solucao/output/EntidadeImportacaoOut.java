@@ -8,7 +8,7 @@ public class EntidadeImportacaoOut {
 		return entidade;
 	}
 
-	void setEntidade(Object entidade) {
+	public void setEntidade(Object entidade) {
 		this.entidade = entidade;
 	}
 

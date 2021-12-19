@@ -1,5 +1,6 @@
 package br.com.analise.migracao.solucao.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import br.com.analise.migracao.solucao.bus.BusPedido;
 import br.com.analise.migracao.solucao.dto.PedidoDto;
 import br.com.analise.migracao.solucao.dto.UtenteDto;
 import br.com.analise.migracao.solucao.enums.TipoLastDate;
+import br.com.analise.migracao.solucao.exceptions.NextItemNegocioException;
 import br.com.analise.migracao.solucao.input.ConfigureIntegracaoIn;
 import br.com.analise.migracao.solucao.input.ConsultarPedidoIn;
 import br.com.analise.migracao.solucao.input.PedidosImportacaoIn;
@@ -45,18 +47,22 @@ import br.com.analise.migracao.solucao.request.RequestContext;
 		Memoria<br>
 		Caro a nivel de recursos Buffer <- BD<br>
 		Monolitico<br>
+		Não é feito em Batch - poderia ser
 		
 		Solução<br>
 		
 		    1º Encapsulamento - emcapsulando campos<br>
 		    2º Coesão - definição de pacotes<br>
+		    3º Captura de itens não migrados para solucao de pendencia
  *
  */
 public class PedidoMigrationService {
 
 	//Migra pedido do SQLServer(A) para Oracle(B)
 	private void saveOrUpdatePedidos(RequestContext rc, ConfiguracaoIntegracao configuracao) throws Exception {//Spring | Primefaces | Servlet 
-
+		List<BusPedido> pendenciaList = new ArrayList<BusPedido>();
+		
+		
 		JobProxy proxy = new JobProxy();
 		PedidosProxy pedidoProxy = new PedidosProxy();
 		ConfigureIntegracaoIn confBegin = new ConfigureIntegracaoIn();
@@ -132,32 +138,33 @@ public class PedidoMigrationService {
 
 			//Blocos Duplicados - talvez podem ser rezumidos na mesma logica - destinar para uma classe de regras negociais
 			
-			//BusHospital ??? - campo e checado mas nao utilizado - talvez internamente na consulta
-			//talvez por uma questao negocial
-			if (pedidoDto.getHospitalDestino() != null && NumberUtils.isNumber(pedidoDto.getHospitalDestino())) {
-				EntidadeImportacaoOut outputEntidade = consultarEntidade(proxy, pedidoDto, pedidoDto.getBoolPrestador(), rc);//Warning: para inclusao, este campo pode chegar nulo
-
-				//se hospitalDestino nao existe passa para o proximo pedido - Warning: Nao gera rastro de itens nao migrados
-				if (outputEntidade == null || outputEntidade.getEntidade() == null) {
-					updateDate = false;
-					break;//NextItemNegocioException
+			try {
+			
+				//BusHospital ??? - campo e checado mas nao utilizado - talvez internamente na consulta
+				//talvez por uma questao negocial
+				if (pedidoDto.getHospitalDestino() != null && NumberUtils.isNumber(pedidoDto.getHospitalDestino())) {
+					EntidadeImportacaoOut outputEntidade = consultarEntidade(proxy, pedidoDto, pedidoDto.getBoolPrestador(), rc);//Warning: para inclusao, este campo pode chegar nulo
+					pedidoBanco.setHospitalDestino(outputEntidade.getEntidade());//hospitalDestino ???
 				}
+	
+				//BusEntidadeRequerente	??? - campo e checado mas nao utilizado - talvez internamente na consulta
+				if (pedidoDto.getEntidadeRequerente() != null && NumberUtils.isNumber(pedidoDto.getEntidadeRequerente())) {
+					EntidadeImportacaoOut outputEntidade = consultarEntidade(proxy, pedidoDto, Boolean.FALSE, rc);
+					pedidoBanco.setEntidadeRequerente(outputEntidade.getEntidade());//entidadeRequerente ???
+				}
+			
+			}catch (NextItemNegocioException e) {
 
-				pedidoBanco.setDestino(outputEntidade.getEntidade());//hospitalDestino ???
-			}
-
-			//BusEntidadeRequerente	??? - campo e checado mas nao utilizado - talvez internamente na consulta
-			if (pedidoDto.getEntidadeRequerente() != null && NumberUtils.isNumber(pedidoDto.getEntidadeRequerente())) {
-
-				EntidadeImportacaoOut outputEntidade = consultarEntidade(proxy, pedidoDto, false, rc);
+				System.err.println("Item não processado."+pedidoDto.toString());
 				
-				//se entidadeRequerente nao existe passa para o proximo pedido - Warning: Nao gera rastro de itens nao migrados
-				if (outputEntidade == null || outputEntidade.getEntidade() == null) {
-					updateDate = false;
-					break;//NextItemNegocioException
-				}
-
-				pedidoBanco.setEntidade(outputEntidade.getEntidade());//entidadeRequerente ???
+				//add pendencia
+				pendenciaList.add(pedidoBanco);
+				
+				//set update 
+				updateDate = Boolean.FALSE;
+				
+				//proximo item
+				break;
 			}
 
 			// O que e feito com o resultado da migracao outPedido ?
@@ -184,9 +191,19 @@ public class PedidoMigrationService {
 			}
 		}
 		
+		//persiste pendencia
+		createPendenciaList(pendenciaList);
+		
 		//finaliza o procedimento
 		updateConfig(proxy, updateDate, TipoLastDate.PEDIDO, rc);
 	}
+
+
+	private void createPendenciaList(List<BusPedido> pendenciaList) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 	private void updateConfig(JobProxy proxy, boolean updateDate, TipoLastDate pedido, RequestContext rc) {
 		System.out.println("update config");
@@ -194,9 +211,18 @@ public class PedidoMigrationService {
 	}
 
 	private EntidadeImportacaoOut consultarEntidade(JobProxy proxy, PedidoDto pedidoDto, Object boolPrestador,
-			RequestContext rc) {
+			RequestContext rc) throws NextItemNegocioException {
 		System.out.println("consulta entidade no banco de destino");
-		return null;
+		
+		boolean isNaoLocalizado = Boolean.FALSE;
+		if(isNaoLocalizado) {
+			throw new NextItemNegocioException();
+		}
+		
+		EntidadeImportacaoOut entidade = new EntidadeImportacaoOut();
+		entidade.setEntidade(new Object());
+
+		return entidade;
 	}
 	
 }

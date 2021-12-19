@@ -2,6 +2,10 @@ package br.com.analise.migracao.solucao.dto;
 
 import java.util.Date;
 
+/**
+ * @author Fidelis.Guimaraes
+ *
+ */
 public class PedidoDto {
 
 	private String codUtente;
@@ -73,6 +77,13 @@ public class PedidoDto {
 	}
 	void setEntidadeRequerente(String entidadeRequerente) {
 		this.entidadeRequerente = entidadeRequerente;
+	}
+	@Override
+	public String toString() {
+		return "PedidoDto [codUtente=" + codUtente + ", codTipoPedido=" + codTipoPedido + ", autorPedido=" + autorPedido
+				+ ", codPds=" + codPds + ", creationDate=" + creationDate + ", codPedido=" + codPedido
+				+ ", estadoDoPedido=" + estadoDoPedido + ", hospitalDestino=" + hospitalDestino + ", boolPrestador="
+				+ boolPrestador + ", entidadeRequerente=" + entidadeRequerente + "]";
 	}
 
 }

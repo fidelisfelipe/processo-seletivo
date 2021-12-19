@@ -44,12 +44,12 @@ public class BusPedido {
 		
 	}
 
-	public void setDestino(Object entidade) {
+	public void setHospitalDestino(Object entidade) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void setEntidade(Object entidade) {
+	public void setEntidadeRequerente(Object entidade) {
 		// TODO Auto-generated method stub
 		
 	}
