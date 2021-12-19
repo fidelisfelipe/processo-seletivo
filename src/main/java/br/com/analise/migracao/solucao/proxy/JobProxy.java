@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.analise.migracao.solucao.dto.PedidoDto;
+import br.com.analise.migracao.solucao.exceptions.NextItemNegocioException;
 import br.com.analise.migracao.solucao.input.ConfigureIntegracaoIn;
 import br.com.analise.migracao.solucao.input.PedidosImportacaoIn;
 import br.com.analise.migracao.solucao.input.UtentesImportacaoIn;
@@ -28,9 +29,16 @@ public class JobProxy {
 		return null;
 	}
 
-	public UtentesImportacaoOut consultarUtenteByOracle(UtentesImportacaoIn utenteInput) {
-		// TODO Auto-generated method stub
-		return null;
+	public UtentesImportacaoOut consultarUtenteByOracle(UtentesImportacaoIn utenteInput) throws NextItemNegocioException {
+		System.out.println("consulta entidade no banco de destino");
+		
+		boolean isNaoLocalizado = Boolean.FALSE;
+		if(isNaoLocalizado) {
+			throw new NextItemNegocioException();
+		}
+		
+		UtentesImportacaoOut usuario = new UtentesImportacaoOut();
+		return usuario;
 	}
 
 	public List<PedidoDto> getLista() {

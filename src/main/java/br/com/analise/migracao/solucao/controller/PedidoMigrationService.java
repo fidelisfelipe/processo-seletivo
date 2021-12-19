@@ -31,7 +31,7 @@ import br.com.analise.migracao.solucao.request.RequestContext;
  * 
  * 		Realiza a convercao dos dados da requisicao para consulta/persistencia	<br>
  * 		Verifica se os dominios existem no destino para criacao ou atualizacao	<br>
- * 			Qnd nao ha usuario de um pedido, passa para o proximo item			<br>
+ * 			Qnd nao ha usuario de um pedido, unidade requerente, hospital de destino, passa para o proximo item	<br>
  * 
  * 		Realiza a persistencia dos dados<br>
  * 
@@ -89,57 +89,53 @@ public class PedidoMigrationService {
 			boolean inserting = false;
 			input.setPedidoDto(pedidoDto);
 
-			//confere a existencia do Pedido na base de destino
-			//o que definira Criar ou Atualizar um Pedido
-			PedidosImportacaoOut outputPedido = proxy.consultarPedidoByOracle(input);
-
-			//BusPedido
-			BusPedido pedidoBanco = null;
-
-			if (outputPedido != null)//obtem o Pedido caso exista
-				pedidoBanco = outputPedido.getPedido();
-
-			if (pedidoBanco == null) {//cria um novo Pedido caso nao exista
-				inserting = true;
-				pedidoBanco = new BusPedido();
-			}
-
-			UtentesImportacaoIn utenteInput = new UtentesImportacaoIn();
-			utenteInput.setRequestContext(rc);
-			utenteInput.setUtenteDto(new UtenteDto(pedidoDto.getCodUtente()));
-
-			//confere a existencia do Usuario deste pedido na base de destino
-			UtentesImportacaoOut outputUtente = proxy.consultarUtenteByOracle(utenteInput);
-
-			//se o Usuario nao existe passa para o proximo pedido
-			if (outputUtente == null) {
-				updateDate = false;
-				break;//NextItemNegocioException
-			}
-
-			//se o Usuario existe no destino, controi objeto para migracao | Convert <code>BusPedido PedidoDtoToBusPedido(pedidoDto)</code> sugestion: MapStruct
-			pedidoBanco.setUtente(outputUtente.getUtente());
-			pedidoBanco.setCodTipoPedido(Long.parseLong(pedidoDto.getCodTipoPedido()));
-			pedidoBanco.setCreatedBy(pedidoDto.getAutorPedido());
-			pedidoBanco.setCodPds(pedidoDto.getCodPds());
-			pedidoBanco.setCreationDate(pedidoDto.getCreationDate());
-			pedidoBanco.setUpdateDate(new Date());
-			pedidoBanco.setNumPedido(pedidoDto.getCodPedido());
-
-			//NumberUtils.createNumber 	- value, 
-			//NumberUtils.isParsable 	- 0~9 and ponto decimal 
-			//NumberUtils.isCreatable 	- hexadecimal, octal numbers, scientific notation and numbers marked with a type qualifier
-			
-			//BusEstado
-			if (pedidoDto.getEstadoDoPedido() != null && NumberUtils.isNumber(pedidoDto.getEstadoDoPedido())) {
-				BusEstado estado = new BusEstado();
-				estado.setCodEstado(Long.parseLong(pedidoDto.getEstadoDoPedido()));
-				pedidoBanco.setEstado(estado);
-			}
-
-			//Blocos Duplicados - talvez podem ser rezumidos na mesma logica - destinar para uma classe de regras negociais
-			
 			try {
+				//confere a existencia do Pedido na base de destino
+				//o que definira Criar ou Atualizar um Pedido
+				PedidosImportacaoOut outputPedido = proxy.consultarPedidoByOracle(input);
+	
+				//BusPedido
+				BusPedido pedidoBanco = null;
+	
+				if (outputPedido != null)//obtem o Pedido caso exista
+					pedidoBanco = outputPedido.getPedido();
+	
+				if (pedidoBanco == null) {//cria um novo Pedido caso nao exista
+					inserting = true;
+					pedidoBanco = new BusPedido();
+				}
+	
+				UtentesImportacaoIn utenteInput = new UtentesImportacaoIn();
+				utenteInput.setRequestContext(rc);
+				utenteInput.setUtenteDto(new UtenteDto(pedidoDto.getCodUtente()));
+			
+				//confere a existencia do Usuario deste pedido na base de destino
+				//se o Usuario nao existe passa para o proximo pedido
+				UtentesImportacaoOut outputUtente = proxy.consultarUtenteByOracle(utenteInput);
+	
+				//se o Usuario existe no destino, controi objeto para migracao | Convert <code>BusPedido PedidoDtoToBusPedido(pedidoDto)</code> sugestion: MapStruct
+				pedidoBanco.setUtente(outputUtente.getUtente());
+				pedidoBanco.setCodTipoPedido(Long.parseLong(pedidoDto.getCodTipoPedido()));
+				pedidoBanco.setCreatedBy(pedidoDto.getAutorPedido());
+				pedidoBanco.setCodPds(pedidoDto.getCodPds());
+				pedidoBanco.setCreationDate(pedidoDto.getCreationDate());
+				pedidoBanco.setUpdateDate(new Date());
+				pedidoBanco.setNumPedido(pedidoDto.getCodPedido());
+	
+				//NumberUtils.createNumber 	- value, 
+				//NumberUtils.isParsable 	- 0~9 and ponto decimal 
+				//NumberUtils.isCreatable 	- hexadecimal, octal numbers, scientific notation and numbers marked with a type qualifier
+				
+				//BusEstado
+				if (pedidoDto.getEstadoDoPedido() != null && NumberUtils.isNumber(pedidoDto.getEstadoDoPedido())) {
+					BusEstado estado = new BusEstado();
+					estado.setCodEstado(Long.parseLong(pedidoDto.getEstadoDoPedido()));
+					pedidoBanco.setEstado(estado);
+				}
+	
+				//Blocos Duplicados - talvez podem ser rezumidos na mesma logica - destinar para uma classe de regras negociais
+			
+			
 			
 				//BusHospital ??? - campo e checado mas nao utilizado - talvez internamente na consulta
 				//talvez por uma questao negocial
