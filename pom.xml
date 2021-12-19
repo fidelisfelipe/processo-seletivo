@@ -8,6 +8,10 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.encoding.resources>UTF-8</project.encoding.resources>
+		<project.reporting.outputEncoding>${project.encoding}</project.reporting.outputEncoding>		
+		
 		<compile.source>1.8</compile.source>
 		<pmd.version>6.21.0</pmd.version>
 		<maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
@@ -87,7 +91,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
-			<scope>compiler</scope><!-- deve migrar para test, mas por enquanto ficará assim :) -->
+			<!-- deve migrar para test, mas por enquanto ficará assim :) -->
 		</dependency>
 	</dependencies>
 
