@@ -16,7 +16,7 @@ public class PedidosProxy {
 		return null;
 	}
 
-	public void salvarOuAtualizar(ConsultarPedidoIn inPedido, boolean isInsert) throws NextItemNegocioException {
+	public void addBatchSalvarOuAtualizar(ConsultarPedidoIn inPedido, boolean isInsert) throws NextItemNegocioException {
 		try {
 		
 			if(isInsert) {
@@ -28,6 +28,11 @@ public class PedidosProxy {
 		}catch (Exception e) {
 			throw new NextItemNegocioException();
 		}
+		
+	}
+
+	public void executeBatch() {
+		System.out.println("execute batch");
 		
 	}
 

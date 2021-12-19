@@ -48,6 +48,30 @@ import br.com.analise.migracao.solucao.request.RequestContext;
 		    1º Encapsulamento - emcapsulando campos<br>
 		    2º Coesão - definição de pacotes<br>
 		    3º Captura de itens não migrados para solucao de pendencia
+		    4º Add comando em batch
+		    
+		Solucao B<br>
+
+		Definir Evento: Scheduler, Trigger + Scheduller, MDB + Scheduller
+
+		Infra:
+		Criação de uma View das Tabelas da Base A
+
+		Code:
+		Criar tabela temporária na Base B
+		
+		Select na View com definição de caracteristica do Dado(Pedidos que possuam Utentes)
+		
+		Carga na Tabela Temporária
+		
+		Select na tabela Temporária para Novos Registros
+		
+		Insert nas Tabelas da Base B
+		
+		Select na tabela Temporária para Atualização de Registros
+		
+		Update nas Tabelas da Base B
+
  *
  */
 public class PedidoMigrationService {
@@ -112,7 +136,7 @@ public class PedidoMigrationService {
 				importacaoProxy.consultarEntidadeRequerente(rc, proxy, pedidoDto, pedidoBanco);
 
 				//cria/atualiza pedido no Oracle
-				pedidoProxy.salvarOuAtualizar(ParsePedidos.montarConsultarPedidoIn(rc, pedidoBanco), inserting);
+				pedidoProxy.addBatchSalvarOuAtualizar(ParsePedidos.montarConsultarPedidoIn(rc, pedidoBanco), inserting);
 
 			}catch (NextItemNegocioException e) {
 				System.err.println("Item não processado."+pedidoDto.toString());
@@ -124,6 +148,9 @@ public class PedidoMigrationService {
 				break;
 			}
 		}
+		
+		//execute batch
+		pedidoProxy.executeBatch();
 		
 		//persiste pendencia
 		createPendenciaList(pendenciaList);
