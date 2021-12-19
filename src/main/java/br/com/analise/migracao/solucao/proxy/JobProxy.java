@@ -1,9 +1,14 @@
-package br.com.analise.migracao.solucao.controller;
+package br.com.analise.migracao.solucao.proxy;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.analise.migracao.solucao.dto.PedidoDto;
+import br.com.analise.migracao.solucao.input.ConfigureIntegracaoIn;
+import br.com.analise.migracao.solucao.input.PedidosImportacaoIn;
+import br.com.analise.migracao.solucao.input.UtentesImportacaoIn;
+import br.com.analise.migracao.solucao.output.PedidosImportacaoOut;
+import br.com.analise.migracao.solucao.output.UtentesImportacaoOut;
 
 public class JobProxy {
 
@@ -28,7 +33,7 @@ public class JobProxy {
 		return null;
 	}
 
-	List<PedidoDto> getLista() {
+	public List<PedidoDto> getLista() {
 		return lista;
 	}
 

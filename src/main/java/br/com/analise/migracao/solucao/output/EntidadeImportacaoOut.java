@@ -1,10 +1,10 @@
-package br.com.analise.migracao.solucao.controller;
+package br.com.analise.migracao.solucao.output;
 
 public class EntidadeImportacaoOut {
 
 	private Object entidade;
 
-	Object getEntidade() {
+	public Object getEntidade() {
 		return entidade;
 	}
 

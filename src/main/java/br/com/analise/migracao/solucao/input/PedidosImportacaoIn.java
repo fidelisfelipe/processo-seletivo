@@ -1,4 +1,4 @@
-package br.com.analise.migracao.solucao.controller;
+package br.com.analise.migracao.solucao.input;
 
 import br.com.analise.migracao.solucao.dto.PedidoDto;
 import br.com.analise.migracao.solucao.request.ConfiguracaoIntegracao;
@@ -22,7 +22,7 @@ public class PedidosImportacaoIn {
 		return pedidoDto;
 	}
 
-	void setPedidoDto(PedidoDto pedidoDto) {
+	public void setPedidoDto(PedidoDto pedidoDto) {
 		this.pedidoDto = pedidoDto;
 	}
 

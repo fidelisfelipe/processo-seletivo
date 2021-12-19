@@ -10,36 +10,46 @@ import br.com.analise.migracao.solucao.bus.BusPedido;
 import br.com.analise.migracao.solucao.dto.PedidoDto;
 import br.com.analise.migracao.solucao.dto.UtenteDto;
 import br.com.analise.migracao.solucao.enums.TipoLastDate;
+import br.com.analise.migracao.solucao.input.ConfigureIntegracaoIn;
 import br.com.analise.migracao.solucao.input.ConsultarPedidoIn;
+import br.com.analise.migracao.solucao.input.PedidosImportacaoIn;
+import br.com.analise.migracao.solucao.input.UtentesImportacaoIn;
 import br.com.analise.migracao.solucao.output.ConsultarPedidoOut;
+import br.com.analise.migracao.solucao.output.EntidadeImportacaoOut;
+import br.com.analise.migracao.solucao.output.PedidosImportacaoOut;
+import br.com.analise.migracao.solucao.output.UtentesImportacaoOut;
+import br.com.analise.migracao.solucao.proxy.JobProxy;
 import br.com.analise.migracao.solucao.proxy.PedidosProxy;
 import br.com.analise.migracao.solucao.request.ConfiguracaoIntegracao;
 import br.com.analise.migracao.solucao.request.RequestContext;
 /**
  * 	PT : Analise de Migracao de Dados
  * 
- * 	- Uma descricao, com base no codigo, de como e efetuado o processo de migracao;
+ * 	- Uma descricao, com base no codigo, de como e efetuado o processo de migracao;<br>
  * 
- * 		Realiza a convercao dos dados da requisicao para consulta/persistencia
- * 		Verifica se os dominios existem no destino para criacao ou atualizacao
- * 			Qnd nao ha usuario de um pedido, passa para o proximo item			
+ * 		Realiza a convercao dos dados da requisicao para consulta/persistencia	<br>
+ * 		Verifica se os dominios existem no destino para criacao ou atualizacao	<br>
+ * 			Qnd nao ha usuario de um pedido, passa para o proximo item			<br>
  * 
- * 		Realiza a persistencia dos dados
+ * 		Realiza a persistencia dos dados<br>
  * 
-	- Avaliacao da clareza do codigo;
-		Sem Encapsulamento
-		Verboso
-		Acoplado
-		Poderia estar mais simples
+	- Avaliacao da clareza do codigo;<br>
+		Sem Encapsulamento<br>
+		Verboso<br>
+		Acoplado<br>
+		Poderia estar mais simples<br>
 	
-	- Identificacao os possiveis erros que o metodo apresenta e como podem ser corrigidos
+	- Identificacao os possiveis erros que o metodo apresenta e como podem ser corrigidos<br>
 	
-		Se hospitalDestino || entidadeRequerente nao existe, passara para o proximo pedido - Warning: Nao gera rastro de itens nao migrados
-		Memoria
-		Caro a nivel de recursos Buffer <- BD
-		Monolitico
+		Se (hospitalDestino || entidadeRequerente) nao existe, passara para o proximo pedido - <b>Warning: Nao gera rastro de itens nao migrados</b><br>
+		Memoria<br>
+		Caro a nivel de recursos Buffer <- BD<br>
+		Monolitico<br>
 		
-	    1º Encapsulamento 
+		Solução<br>
+		
+		    1º Encapsulamento - emcapsulando campos<br>
+		    2º Coesão - definição de pacotes<br>
  *
  */
 public class PedidoMigrationService {
@@ -53,7 +63,7 @@ public class PedidoMigrationService {
 		
 		//configura a requisicao do objeto de integracao
 		confBegin.setTipo(TipoLastDate.PEDIDO);
-		confBegin.process = 1;
+		confBegin.setProcess(1);
 		confBegin.setRequestContext(rc);
 
 		//inicia o procedimento - ?
@@ -101,7 +111,7 @@ public class PedidoMigrationService {
 			}
 
 			//se o Usuario existe no destino, controi objeto para migracao | Convert <code>BusPedido PedidoDtoToBusPedido(pedidoDto)</code> sugestion: MapStruct
-			pedidoBanco.setUtente(outputUtente.utente);
+			pedidoBanco.setUtente(outputUtente.getUtente());
 			pedidoBanco.setCodTipoPedido(Long.parseLong(pedidoDto.getCodTipoPedido()));
 			pedidoBanco.setCreatedBy(pedidoDto.getAutorPedido());
 			pedidoBanco.setCodPds(pedidoDto.getCodPds());

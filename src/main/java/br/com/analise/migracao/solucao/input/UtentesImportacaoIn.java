@@ -1,4 +1,4 @@
-package br.com.analise.migracao.solucao.controller;
+package br.com.analise.migracao.solucao.input;
 
 import br.com.analise.migracao.solucao.dto.UtenteDto;
 import br.com.analise.migracao.solucao.request.RequestContext;
