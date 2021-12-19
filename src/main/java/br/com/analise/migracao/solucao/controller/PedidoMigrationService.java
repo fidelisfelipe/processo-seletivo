@@ -1,7 +1,10 @@
 package br.com.analise.migracao.solucao.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import org.junit.Test;
 
 import br.com.analise.migracao.solucao.bus.BusPedido;
 import br.com.analise.migracao.solucao.dto.PedidoDto;
@@ -24,7 +27,7 @@ import br.com.analise.migracao.solucao.request.RequestContext;
  * 
  * 		Realiza a convercao dos dados da requisicao para consulta/persistencia	<br>
  * 		Verifica se os dominios existem no destino para criacao ou atualizacao	<br>
- * 			Qnd nao ha usuario de um pedido, unidade requerente, hospital de destino, passa para o proximo item	<br>
+ * 			Qnd nao ha usuario de um pedido, unidade requerente, hospital de destino, finaliza a iteração<br>
  * 
  * 		Realiza a persistencia dos dados<br>
  * 
@@ -37,7 +40,7 @@ import br.com.analise.migracao.solucao.request.RequestContext;
 	
 	- Identificacao os possiveis erros que o metodo apresenta e como podem ser corrigidos<br>
 	
-		Se (hospitalDestino || entidadeRequerente) nao existe, passara para o proximo pedido - <b>Warning: Nao gera rastro de itens nao migrados</b><br>
+		Se (hospitalDestino || entidadeRequerente) nao existe, finaliza migração - <b>Warning: Nao gera rastro de itens nao migrados</b><br>
 		Memoria<br>
 		Caro a nivel de recursos Buffer <- BD<br>
 		Monolitico<br>
@@ -75,9 +78,10 @@ import br.com.analise.migracao.solucao.request.RequestContext;
  *
  */
 public class PedidoMigrationService {
-
+	
 	//Migra pedido do SQLServer(A) para Oracle(B)
-	private void saveOrUpdatePedidos(RequestContext rc, ConfiguracaoIntegracao configuracao) throws Exception {//Spring | Primefaces | Servlet 
+	@Test
+	public void saveOrUpdatePedidos(RequestContext rc, ConfiguracaoIntegracao configuracao) throws Exception {//Spring | Primefaces | Servlet 
 		List<BusPedido> pendenciaList = new ArrayList<BusPedido>();
 
 		JobProxy proxy = new JobProxy();
@@ -145,7 +149,7 @@ public class PedidoMigrationService {
 				//set update 
 				updateDate = Boolean.FALSE;
 				//proximo item
-				break;
+				//break;
 			}
 		}
 		
