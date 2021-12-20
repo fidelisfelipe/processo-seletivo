@@ -17,32 +17,42 @@ import br.com.analise.migracao.problema.pedidos.proxy.PedidosProxy;
 /**
  * 	PT : Analise de Migracao de Dados
  * 
- * 	- Uma descricao, com base no codigo, de como e efetuado o processo de migracao;
+ * 	- Uma descricao, com base no codigo, de como e efetuado o processo de migracao;<br>
  * 
- * 		Realiza a convercao dos dados da requisicao para consulta/persistencia
- * 		Verifica se os dominios existem no destino para criacao ou atualizacao
- * 			Qnd nao ha usuario de um pedido, passa para o proximo item			
+ * 		Realiza a convercao dos dados da requisicao para consulta/persistencia	<br>
+ * 		Verifica se os dominios existem no destino para criacao ou atualizacao	<br>
+ * 			Qnd nao ha usuario de um pedido, unidade requerente, hospital de destino, finaliza a iteração<br>
  * 
- * 		Realiza a persistencia dos dados
+ * 		Realiza a persistencia dos dados<br>
  * 
-	- Avaliacao da clareza do codigo;
-		Sem Encapsulamento
-		Verboso
-		Acoplado
-		Poderia estar mais simples
+	- Avaliacao da clareza do codigo;<br>
+		Sem Encapsulamento<br>
+		Verboso<br>
+		Acoplado<br>
+		Poderia estar mais simples<br>
+		PortuguêsInglês fica estranho
 	
-	- Identificacao os possiveis erros que o metodo apresenta e como podem ser corrigidos
+	- Identificacao os possiveis erros que o metodo apresenta e como podem ser corrigidos<br>
 	
-		Se hospitalDestino || entidadeRequerente nao existe, passara para o proximo pedido - Warning: Nao gera rastro de itens nao migrados
-		Memoria
-		Caro a nivel de recursos Buffer <- BD
-		Monolitico
+		Se (hospitalDestino || entidadeRequerente) nao existe, finaliza migração - <b>Warning: Nao gera rastro de itens nao migrados</b><br>
+		Memoria<br>
+		Caro a nivel de recursos Buffer <- BD<br>
+		Monolitico<br>
+		Não é feito em Batch - poderia ser
+		
+		Solução<br>
+		
+		    1º Encapsulamento - emcapsulando campos<br>
+		    2º Coesão - definição de pacotes<br>
+		    3º Captura de itens não migrados para solucao de pendencia
+		    4º Add comando em batch
+
  *
  */
 public class PedidoMigrationService {
 
 	//Migra pedido do SQLServer(A) para Oracle(B)
-	private void saveOrUpdatePedidos(RequestContext rc, ConfiguracaoIntegracao configuracao) throws Exception {//Spring | Primefaces | Servlet 
+	public void saveOrUpdatePedidos(RequestContext rc, ConfiguracaoIntegracao configuracao) throws Exception {//Spring | Primefaces | Servlet 
 
 		JobProxy proxy = new JobProxy();
 		PedidosProxy pedidoProxy = new PedidosProxy();

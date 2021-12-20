@@ -9,33 +9,30 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.junit.Test;
-
 import br.com.algoritimos.pojo.Pojo;
 import br.com.algoritimos.pojo.PojoFilho;
 
 /**
  * Java Architecture for XML Binding
- * A JAXB é uma das APIs da plataforma Java EE e fornece suporte à manipulação de objetos Java e XML. 
- * Sua principal característica é a capacidade de vincular XML a objetos Java e vice-versa. 
- * E o melhor é que ela já está incluída na JDK 6
+ * A JAXB ï¿½ uma das APIs da plataforma Java EE e fornece suporte ï¿½ manipulaï¿½ï¿½o de objetos Java e XML. 
+ * Sua principal caracterï¿½stica ï¿½ a capacidade de vincular XML a objetos Java e vice-versa. 
+ * E o melhor ï¿½ que ela jï¿½ estï¿½ incluï¿½da na JDK 6
  * 
  * Usando JAXB somos capazes de criar facilmente classes a partir de um schema (XSD). 
  * Isso mesmo. Com ela somos capazes de transformar um arquivo XSD em um conjunto de classes num piscar de olhos. 
  * No momento vamos nos focar nos processos de Marshall e Unmarshall.
- * Marshall é o processo de transformar objetos Java em XML e o Unmarshall faz o caminho inverso, usa os dados de um XML para popular objetos Java.
+ * Marshall ï¿½ o processo de transformar objetos Java em XML e o Unmarshall faz o caminho inverso, usa os dados de um XML para popular objetos Java.
  * 
- * Um ponto importante é a necessidade de um arquivo com o nome jaxb.index, 
+ * Um ponto importante ï¿½ a necessidade de um arquivo com o nome jaxb.index, 
  * contendo o nome das classes que queremos transformar em XML, e deve estar no mesmo pacote das classes (Figura 01).
- * Ele é requerido pelo JAXB para gerar as classes em tempo de execução.
- * Essa não é a única forma de fazer isso, mas é a que atende ao nosso caso específico.
+ * Ele ï¿½ requerido pelo JAXB para gerar as classes em tempo de execuï¿½ï¿½o.
+ * Essa nï¿½o ï¿½ a ï¿½nica forma de fazer isso, mas ï¿½ a que atende ao nosso caso especï¿½fico.
  * 
  * @author Fidelis.Guimaraes
  *
  */
 public class JAXB {
 
-	@Test
 	public void testJAXBMarshallAndUnmarshall() throws JAXBException, FileNotFoundException {
 		PojoFilho filho = new PojoFilho(2);
 		Pojo pojo = new Pojo(1, filho);

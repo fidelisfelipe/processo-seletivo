@@ -1,16 +1,14 @@
 package br.com.analise.migracao.solucao.controller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import org.junit.Test;
 
 import br.com.analise.migracao.solucao.bus.BusPedido;
 import br.com.analise.migracao.solucao.dto.PedidoDto;
 import br.com.analise.migracao.solucao.enums.TipoLastDate;
 import br.com.analise.migracao.solucao.exceptions.NextItemNegocioException;
 import br.com.analise.migracao.solucao.input.ConfigureIntegracaoIn;
+import br.com.analise.migracao.solucao.input.ConsultarPedidoIn;
 import br.com.analise.migracao.solucao.input.PedidosImportacaoIn;
 import br.com.analise.migracao.solucao.output.PedidosImportacaoOut;
 import br.com.analise.migracao.solucao.output.UtentesImportacaoOut;
@@ -52,41 +50,19 @@ import br.com.analise.migracao.solucao.request.RequestContext;
 		    2º Coesão - definição de pacotes<br>
 		    3º Captura de itens não migrados para solucao de pendencia
 		    4º Add comando em batch
-		    
-		Solucao B<br>
-
-		Definir Evento: Scheduler, Trigger + Scheduller, MDB + Scheduller
-
-		Infra:
-		Criação de uma View das Tabelas da Base A
-
-		Code:
-		Criar tabela temporária na Base B
-		
-		Select na View com definição de caracteristica do Dado(Pedidos que possuam Utentes)
-		
-		Carga na Tabela Temporária
-		
-		Select na tabela Temporária para Novos Registros
-		
-		Insert nas Tabelas da Base B
-		
-		Select na tabela Temporária para Atualização de Registros
-		
-		Update nas Tabelas da Base B
 
  *
  */
 public class PedidoMigrationService {
 	
 	//Migra pedido do SQLServer(A) para Oracle(B)
-	@Test
+
 	public void saveOrUpdatePedidos(RequestContext rc, ConfiguracaoIntegracao configuracao) throws Exception {//Spring | Primefaces | Servlet 
 		List<BusPedido> pendenciaList = new ArrayList<BusPedido>();
 
-		JobProxy proxy = new JobProxy();
-		PedidosProxy pedidoProxy = new PedidosProxy();
-		ImportacaoProxy importacaoProxy = new ImportacaoProxy();
+		JobProxy proxy = createJobProxy();
+		PedidosProxy pedidoProxy = createPedidosProxy();
+		ImportacaoProxy importacaoProxy = createImportacaoProxy();
 
 		ConfigureIntegracaoIn confBegin = new ConfigureIntegracaoIn();
 
@@ -99,7 +75,7 @@ public class PedidoMigrationService {
 		proxy.updateProcess(confBegin);
 
 		//input para consulta
-		PedidosImportacaoIn input = new PedidosImportacaoIn();
+		PedidosImportacaoIn input = createPedidosImportacaoIn();
 		ParsePedidos.montarPedidosImportacaoIn(input, configuracao, rc);
 
 		//obtem os dados do SqlServer com as informacoes da requisicao
@@ -123,7 +99,7 @@ public class PedidoMigrationService {
 
 				if (pedidoBanco == null) {//cria um novo Pedido caso nao exista
 					inserting = true;
-					pedidoBanco = new BusPedido();
+					pedidoBanco = createBusPedido();
 				}
 
 				//se o Usuario nao existe no destino passa para o proximo item
@@ -139,8 +115,13 @@ public class PedidoMigrationService {
 				//se o HospitalDestino nao existe no destino passa para o proximo item
 				importacaoProxy.consultarEntidadeRequerente(rc, proxy, pedidoDto, pedidoBanco);
 
+				ConsultarPedidoIn inPedido = createConsultarPedidoIn();
+				
+				//monta dados para persistencia
+				ParsePedidos.montarConsultarPedidoIn(rc, pedidoBanco, inPedido);
+						
 				//cria/atualiza pedido no Oracle
-				pedidoProxy.addBatchSalvarOuAtualizar(ParsePedidos.montarConsultarPedidoIn(rc, pedidoBanco), inserting);
+				pedidoProxy.addBatchSalvarOuAtualizar(inPedido, inserting);
 
 			}catch (NextItemNegocioException e) {
 				System.err.println("Item não processado."+pedidoDto.toString());
@@ -164,8 +145,34 @@ public class PedidoMigrationService {
 	}
 
 
+	public ConsultarPedidoIn createConsultarPedidoIn() {
+		return new ConsultarPedidoIn();
+	}
+
+
+	public BusPedido createBusPedido() {
+		return new BusPedido();
+	}
+
+
+	public PedidosImportacaoIn createPedidosImportacaoIn() {
+		return new PedidosImportacaoIn();
+	}
+
+
+	public JobProxy createJobProxy() {
+		return new JobProxy();
+	}
+	public PedidosProxy createPedidosProxy() {
+		return new PedidosProxy();
+	}
+	public ImportacaoProxy createImportacaoProxy() {
+		return new ImportacaoProxy();
+	}
+
+
 	private void createPendenciaList(List<BusPedido> pendenciaList) {
-		// TODO Auto-generated method stub
+		System.out.println("cria pendencia para posterior solução");
 		
 	}
 

@@ -19,8 +19,9 @@
 		<guava.version>30.1.1-jre</guava.version>
 		<commons.version>3.12.0</commons.version>
 		<httpclient.version>4.5.13</httpclient.version>
-		<junit.jupiter.api.version>5.7.1</junit.jupiter.api.version>
+<!-- 		<junit.jupiter.api.version>5.7.1</junit.jupiter.api.version> -->
 		<junit.version>4.13.2</junit.version>
+		<mockito.version>1.10.19</mockito.version>
 	</properties>
 	
 	<reporting>
@@ -81,17 +82,24 @@
 			<artifactId>httpclient</artifactId>
 			<version>${httpclient.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>${junit.jupiter.api.version}</version>
-			<scope>test</scope>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.junit.jupiter</groupId> -->
+<!-- 			<artifactId>junit-jupiter-api</artifactId> -->
+<!-- 			<version>${junit.jupiter.api.version}</version> -->
+<!-- 			<scope>test</scope> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
+			<scope>test</scope>
 			<!-- deve migrar para test, mas por enquanto ficará assim :) -->
+		</dependency>
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-all</artifactId>
+		    <version>${mockito.version}</version>
+		    <scope>test</scope>
 		</dependency>
 	</dependencies>
 

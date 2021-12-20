@@ -25,11 +25,9 @@ public class ParsePedidos {
 		return utenteInput;
 	}
 
-	public static ConsultarPedidoIn montarConsultarPedidoIn(RequestContext rc, BusPedido pedidoBanco) {
-		ConsultarPedidoIn inPedido = new ConsultarPedidoIn();
+	public static void montarConsultarPedidoIn(RequestContext rc, BusPedido pedidoBanco, ConsultarPedidoIn inPedido) {
 		inPedido.setRequestContext(rc);
 		inPedido.setPedido(pedidoBanco);
-		return inPedido;
 	}
 
 	public static void montarBusPedido(BusPedido pedidoBanco, PedidoDto pedidoDto,

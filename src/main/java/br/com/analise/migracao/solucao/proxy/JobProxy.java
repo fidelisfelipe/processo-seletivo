@@ -16,7 +16,7 @@ public class JobProxy {
 	private List<PedidoDto> lista = new ArrayList<PedidoDto>();
 
 	public void updateProcess(ConfigureIntegracaoIn confBegin) {
-		// TODO Auto-generated method stub
+		System.out.println("JobProxy.updateProcess()");
 		
 	}
 
